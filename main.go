@@ -45,9 +45,10 @@ type RedditVideo struct {
 }
 
 type ListingConfig struct {
-	Name  string
-	Limit string
-	Time  string
+	Name   string
+	Limit  string
+	Time   string
+	SortBy string
 }
 
 func NewListingConfig(r *http.Request) *ListingConfig {
@@ -61,20 +62,25 @@ func NewListingConfig(r *http.Request) *ListingConfig {
 	}
 
 	time := params.Get("t")
-	if time == "" {
-		time = "week"
+	sortBy := params.Get("sort_by")
+	if sortBy == "" {
+		sortBy = "best"
 	}
 
 	return &ListingConfig{
-		Name:  name,
-		Limit: limit,
-		Time:  time,
+		Name:   name,
+		Limit:  limit,
+		Time:   time,
+		SortBy: sortBy,
 	}
 }
 
 func viewSubreddit(w http.ResponseWriter, r *http.Request) {
 	config := NewListingConfig(r)
-	url := fmt.Sprintf("https://www.reddit.com/r/%v/top.json?limit=%v&t=%v", config.Name, config.Limit, config.Time)
+	url := fmt.Sprintf("https://www.reddit.com/r/%v/%v.json?limit=%v", config.Name, config.SortBy, config.Limit)
+	if config.Time != "" {
+		url += fmt.Sprintf("&t=%v", config.Time)
+	}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
