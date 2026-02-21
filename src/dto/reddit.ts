@@ -76,6 +76,7 @@ export interface RedditPost {
 
 export interface RedditResponse {
   data: {
+    after: string
     children: {
       data: RedditPost
     }[]
