@@ -1,12 +1,13 @@
 <script setup lang="ts">
+import RedditPost from '@/components/RedditPost.vue'
 import SortButton from '@/components/SortButton.vue'
-import { RedditSort, type RedditPost, type RedditResponse } from '@/dto/reddit'
+import { RedditSort, type RedditPost as RedditPostType, type RedditResponse } from '@/dto/reddit'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const subreddit = ref<string>(route.params.sub as string)
-const posts = ref<RedditPost[]>([])
+const posts = ref<RedditPostType[]>([])
 const sort = ref<RedditSort>(route.params.sort ? (route.params.sort as RedditSort) : RedditSort.HOT)
 
 const fetchSubredditData = async () => {
@@ -41,8 +42,7 @@ watch([subreddit, sort], async () => {
 
     <div v-if="posts.length > 0">
       <div v-for="post in posts" :key="post.id" class="border p-4 mb-4 rounded">
-        <h3 class="text-xl font-semibold">{{ post.title }}</h3>
-        <p class="text-gray-600">Posted by {{ post.author }}</p>
+        <RedditPost :post="post" />
       </div>
     </div>
     <div v-else>
