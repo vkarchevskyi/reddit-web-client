@@ -87,8 +87,7 @@ const openPostLink = () => {
       </div>
 
       <div v-else-if="hasEmbedded" class="relative w-full">
-        <EmbeddedIframe :content="embeddedContent" :width="post.secure_media_embed?.width"
-          :height="post.secure_media_embed?.height" />
+        <EmbeddedIframe :content="embeddedContent" />
       </div>
 
       <div v-else-if="(hasGallery && currentGalleryImage) || (hasImages && previewImage)" class="relative w-full">
