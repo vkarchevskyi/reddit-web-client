@@ -30,7 +30,14 @@ const dimensions = computed(() => {
 
 <template>
   <div v-if="iframeSrc" class="w-full flex items-center justify-center bg-black">
-    <iframe :src="iframeSrc" :width="dimensions.width" :height="dimensions.height" frameborder="0" scrolling="no"
-      allowfullscreen style="max-width: 100%; height: auto; aspect-ratio: auto;" />
+    <iframe
+      :src="iframeSrc"
+      :width="dimensions.width"
+      :height="dimensions.height"
+      frameborder="0"
+      scrolling="no"
+      allowfullscreen
+      style="max-width: 100%; height: auto; aspect-ratio: auto"
+    />
   </div>
 </template>

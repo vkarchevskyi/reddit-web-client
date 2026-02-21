@@ -36,7 +36,9 @@ const embeddedContent = computed(() => activePost.value?.secure_media_embed?.con
 const hasGallery = computed(() => activePost.value?.is_gallery)
 const hasVideo = computed(() => activePost.value?.is_video)
 const hasEmbedded = computed(() => activePost.value?.secure_media_embed?.content)
-const hasImages = computed(() => activePost.value?.preview?.images && activePost.value?.preview?.images.length > 0)
+const hasImages = computed(
+  () => activePost.value?.preview?.images && activePost.value?.preview?.images.length > 0,
+)
 
 const mediaCount = computed(() => {
   if (hasGallery.value) {
@@ -62,12 +64,15 @@ const openPostLink = () => {
 
 <template>
   <div
-    class="bg-black/30 rounded-lg overflow-hidden shadow-lg border border-gray-700 hover:border-gray-600 transition-colors">
+    class="bg-black/30 rounded-lg overflow-hidden shadow-lg border border-gray-700 hover:border-gray-600 transition-colors"
+  >
     <div class="p-4 border-b border-gray-700">
       <div class="flex items-start gap-3">
         <div class="flex-1">
-          <h2 class="text-lg font-semibold text-gray-100 hover:text-gray-400 cursor-pointer line-clamp-2"
-            @click="openPostLink">
+          <h2
+            class="text-lg font-semibold text-gray-100 hover:text-gray-400 cursor-pointer line-clamp-2"
+            @click="openPostLink"
+          >
             {{ post.title }}
           </h2>
           <div class="text-sm text-gray-400 mt-2">
@@ -82,41 +87,63 @@ const openPostLink = () => {
 
     <div v-if="hasVideo || hasImages || hasGallery || hasEmbedded" class="bg-black relative">
       <div v-if="hasVideo && redditVideoUrl" class="relative w-full bg-black">
-        <video :src="redditVideoUrl" controls class="w-full max-h-96 object-contain" @play="isVideoPlaying = true"
-          @pause="isVideoPlaying = false" />
+        <video
+          :src="redditVideoUrl"
+          controls
+          class="w-full max-h-96 object-contain"
+          @play="isVideoPlaying = true"
+          @pause="isVideoPlaying = false"
+        />
       </div>
 
       <div v-else-if="hasEmbedded" class="relative w-full">
         <EmbeddedIframe :content="embeddedContent" />
       </div>
 
-      <div v-else-if="(hasGallery && currentGalleryImage) || (hasImages && previewImage)" class="relative w-full">
-        <img :src="(hasGallery ? currentGalleryImage : previewImage) ?? ''" :alt="post.title"
-          class="w-full max-h-96 object-contain" />
+      <div
+        v-else-if="(hasGallery && currentGalleryImage) || (hasImages && previewImage)"
+        class="relative w-full"
+      >
+        <img
+          :src="(hasGallery ? currentGalleryImage : previewImage) ?? ''"
+          :alt="post.title"
+          class="w-full max-h-96 object-contain"
+        />
 
-        <div v-if="mediaCount > 1" class="absolute inset-0 flex items-center justify-between px-4 pointer-events-none">
+        <div
+          v-if="mediaCount > 1"
+          class="absolute inset-0 flex items-center justify-between px-4 pointer-events-none"
+        >
           <button
             class="pointer-events-auto bg-black/50 hover:bg-black/75 text-white rounded-full p-2 transition-colors"
-            @click="goToPreviousImage">
+            @click="goToPreviousImage"
+          >
             <ChevronLeft class="w-6 h-6" />
           </button>
 
           <button
             class="pointer-events-auto bg-black/50 hover:bg-black/75 text-white rounded-full p-2 transition-colors"
-            @click="goToNextImage">
+            @click="goToNextImage"
+          >
             <ChevronRight class="w-6 h-6" />
           </button>
         </div>
 
-        <div v-if="mediaCount > 1"
-          class="absolute top-3 right-3 bg-black/75 text-white text-sm px-3 py-1 rounded font-medium">
+        <div
+          v-if="mediaCount > 1"
+          class="absolute top-3 right-3 bg-black/75 text-white text-sm px-3 py-1 rounded font-medium"
+        >
           {{ activeImageIndex + 1 }} / {{ mediaCount }}
         </div>
 
-        <div v-if="mediaCount > 1"
-          class="absolute bottom-2 left-3 bg-black/75 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
+        <div
+          v-if="mediaCount > 1"
+          class="absolute bottom-2 left-3 bg-black/75 text-white text-xs px-2 py-1 rounded flex items-center gap-1"
+        >
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" />
+            <path
+              d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+            />
           </svg>
           {{ mediaCount }}
         </div>
@@ -134,8 +161,10 @@ const openPostLink = () => {
         <span class="font-medium">{{ post.num_comments }}</span>
       </div>
 
-      <button class="ml-auto px-3 py-1 rounded bg-gray-600/20 text-white hover:bg-gray-600/30 transition-colors"
-        @click="openPostLink">
+      <button
+        class="ml-auto px-3 py-1 rounded bg-gray-600/20 text-white hover:bg-gray-600/30 transition-colors"
+        @click="openPostLink"
+      >
         View on Reddit
       </button>
     </div>

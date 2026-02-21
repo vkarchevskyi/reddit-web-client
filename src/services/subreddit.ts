@@ -15,5 +15,5 @@ export const fetchSubredditData = async (
     console.error('Error fetching subreddit data:', error)
   }
 
-  return null;
+  return null
 }
