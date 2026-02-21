@@ -10,7 +10,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/r/:sub',
+      path: '/r/:sub/:sort?',
       name: 'subreddit',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

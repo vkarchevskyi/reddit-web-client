@@ -7,7 +7,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const subreddit = ref<string>(route.params.sub as string)
 const posts = ref<RedditPost[]>([])
-const sort = ref<RedditSort>(RedditSort.HOT)
+const sort = ref<RedditSort>(route.params.sort ? (route.params.sort as RedditSort) : RedditSort.HOT)
 
 const fetchSubredditData = async () => {
   try {
@@ -24,20 +24,19 @@ const fetchSubredditData = async () => {
   }
 }
 
-// Watch for changes and refetch
 watch([subreddit, sort], async () => {
   fetchSubredditData()
 }, { immediate: true })
 </script>
 
 <template>
-  <main>
+  <main class="space-y-5">
     <h2 class="text-2xl font-bold">r/{{ subreddit }}</h2>
 
-    <div>
-      <SortButton label="Hot" @click="sort = RedditSort.HOT;"></SortButton>
-      <SortButton label="New" @click="sort = RedditSort.NEW;"></SortButton>
-      <SortButton label="Top" @click="sort = RedditSort.TOP;"></SortButton>
+    <div class="space-x-4">
+      <SortButton label="Hot" @click="sort = RedditSort.HOT;" :active="sort === RedditSort.HOT"></SortButton>
+      <SortButton label="New" @click="sort = RedditSort.NEW;" :active="sort === RedditSort.NEW"></SortButton>
+      <SortButton label="Top" @click="sort = RedditSort.TOP;" :active="sort === RedditSort.TOP"></SortButton>
     </div>
 
     <div v-if="posts.length > 0">
