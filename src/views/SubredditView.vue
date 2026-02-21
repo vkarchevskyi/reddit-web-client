@@ -2,6 +2,7 @@
 import RedditPost from '@/components/RedditPost.vue'
 import SortButton from '@/components/SortButton.vue'
 import { RedditSort, type RedditPost as RedditPostType } from '@/dto/reddit'
+import router from '@/router'
 import { fetchSubredditData } from '@/services/subreddit'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -12,6 +13,11 @@ const posts = ref<RedditPostType[]>([])
 const sort = ref<RedditSort>(route.params.sort ? (route.params.sort as RedditSort) : RedditSort.HOT)
 
 watch([subreddit, sort], async () => {
+  router.push({ name: 'subreddit', params: { sub: subreddit.value, sort: sort.value } })
+}, { immediate: true })
+
+watch(route, async (newRoute) => {
+  subreddit.value = newRoute.params.sub as string
   const data = await fetchSubredditData(subreddit.value, sort.value)
   if (data) {
     posts.value = data.data.children.map(child => child.data)
