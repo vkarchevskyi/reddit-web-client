@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import SearchBox from '@/components/SearchBox.vue';
+
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <SearchBox class="mx-auto mt-4"></SearchBox>
   </main>
 </template>
