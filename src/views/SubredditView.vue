@@ -30,7 +30,7 @@ watch([subreddit, sort], async () => {
 </script>
 
 <template>
-  <main class="space-y-5">
+  <main class="space-y-5 mx-auto max-w-md lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">
     <h2 class="text-2xl font-bold">r/{{ subreddit }}</h2>
 
     <div class="space-x-4">
