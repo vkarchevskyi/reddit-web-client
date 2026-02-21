@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import RedditPost from '@/components/RedditPost.vue'
 import SortButton from '@/components/SortButton.vue'
-import { RedditSort, type RedditPost as RedditPostType, type RedditResponse } from '@/dto/reddit'
+import { RedditSort, type RedditPost as RedditPostType } from '@/dto/reddit'
+import { fetchSubredditData } from '@/services/subreddit'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -10,23 +11,13 @@ const subreddit = ref<string>(route.params.sub as string)
 const posts = ref<RedditPostType[]>([])
 const sort = ref<RedditSort>(route.params.sort ? (route.params.sort as RedditSort) : RedditSort.HOT)
 
-const fetchSubredditData = async () => {
-  try {
-    const response = await fetch(`https://www.reddit.com/r/${subreddit.value}/${sort.value}.json`)
-    if (!response.ok) {
-      throw new Error('Network response was not ok')
-    }
-
-    const responseData = await response.json() as RedditResponse;
-    posts.value = responseData.data.children.map(child => child.data)
-    console.log(posts.value);
-  } catch (error) {
-    console.error('Error fetching subreddit data:', error)
-  }
-}
-
 watch([subreddit, sort], async () => {
-  fetchSubredditData()
+  const data = await fetchSubredditData(subreddit.value, sort.value)
+  if (data) {
+    posts.value = data.data.children.map(child => child.data)
+  } else {
+    posts.value = []
+  }
 }, { immediate: true })
 </script>
 
@@ -41,7 +32,7 @@ watch([subreddit, sort], async () => {
     </div>
 
     <div v-if="posts.length > 0">
-      <div v-for="post in posts" :key="post.id" class="border p-4 mb-4 rounded">
+      <div v-for="post in posts" :key="post.id" class="border mb-4 rounded">
         <RedditPost :post="post" />
       </div>
     </div>
